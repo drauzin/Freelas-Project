@@ -12,16 +12,13 @@
 Projeto em desenvolvimento com o objetivo de conectar **freelancers** e **clientes locais**.  
 Pessoas podem **oferecer serviços** ou **procurar profissionais** de forma prática e segura.
 Projeto sem fins lucrativos
-**Front-end** em breve!
+(**Front-end** em breve!)
 
 ---
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades já implantadas e testadas.
 
 - Cadastro e login de usuários
-- Autenticação com JWT
-- Cadastro de ofertas de serviço (freelancer)
-- Busca por serviços (cliente)
 - Documentação da API com Swagger
 - Validações com Joi
 - Arquitetura MVC
@@ -49,7 +46,8 @@ Acesse a documentação Swagger localmente:
 
 ## 🧪 Como testar localmente
 
-```bash
 git clone https://github.com/drauzin/Freelas-Project.git
 cd Freelas-Project
 npm install
+node server.js
+
