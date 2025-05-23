@@ -2,6 +2,9 @@
 // Cadastro de usuário
 const db = require('../config/db');
 const Joi = require('joi');
+const jwt = require('jsonwebtoken');
+const pool = require('../config/db');
+
 
 // Definindo o schema de validação
 const schema = Joi.object({
@@ -46,7 +49,7 @@ exports.register = async (req, res) => {
   try {
 
      const [existingUser] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
-    // Verifica se o usuário já existe
+    // Fazemos uma consulta no banco de dados para verificar se o email já existe.
     if (existingUser.length > 0) {
       return res.status(400).json({ message: 'Este e-mail já está registrado.' });
     }
@@ -68,15 +71,21 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  try {
-    const [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+   try {
+    const [rows] = await pool.execute('SELECT * FROM users WHERE email = ?', [email]);
+    const user = rows[0];
 
-    if (users.length === 0 || users[0].password !== password) {
+    if (!user || user.password !== password) {
       return res.status(401).json({ message: 'Email ou senha incorretos.' });
     }
 
-
-    res.status(200).json({ message: 'Login bem-sucedido' });
+    
+  const token = jwt.sign(
+      { id: user.id, email: user.email }, //vamos usar o JWT para gerar um token de autenticação
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+  )
+    res.status(200).json({ message: 'Login bem-sucedido', token });
   } catch (error) {
     res.status(500).json({ message: 'Erro ao fazer login', error });
   }

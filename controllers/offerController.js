@@ -1,7 +1,13 @@
+// controllers/offerController.js
 exports.createOffer = (req, res) => {
-  res.send('Oferta criada com sucesso!');
+  const userId = req.user.id; // vem do JWT
+  const { title, description } = req.body;
+
+  // Aqui você faria a lógica de salvar no banco
+  res.status(201).json({ message: 'Oferta criada com sucesso!', offer: { userId, title, description } });
 };
 
 exports.getAllOffers = (req, res) => {
-  res.send('Listando todas as ofertas...');
+  // Lógica de buscar ofertas no banco
+  res.status(200).json({ message: 'Listando todas as ofertas.' });
 };
