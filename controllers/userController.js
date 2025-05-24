@@ -1,5 +1,4 @@
-
-// Cadastro de usuário
+const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const Joi = require('joi');
 
@@ -75,9 +74,22 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Email ou senha incorretos.' });
     }
 
+ const user = users[0]; 
+ 
+ const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
 
-    res.status(200).json({ message: 'Login bem-sucedido' });
+    // Retorna mensagem e token
+    return res.status(200).json({
+      message: 'Login bem-sucedido',
+      token
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao fazer login', error });
+    console.error('Erro ao fazer login:', error);
+    return res.status(500).json({ message: 'Erro ao fazer login.' });
   }
 };
+
