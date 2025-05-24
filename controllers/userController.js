@@ -1,42 +1,12 @@
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
-const Joi = require('joi');
-
-// Definindo o schema de validação
-const schema = Joi.object({
-  name: Joi.string()
-    .pattern(/^[A-Za-zÀ-ÿ\s]+$/)
-    .min(2)
-    .max(50)
-    .required()
-    .messages({
-      'string.pattern.base': 'O nome deve conter apenas letras e espaços.',
-      'string.empty': 'Preencha todos dados corretamente.',
-      'any.required': 'Preencha todos dados corretamente.',
-    }),
-  email: Joi.string()
-    .email()
-    .required()
-    .messages({
-      'string.email': 'Email inválido.',
-      'string.empty': 'Preencha todos dados corretamente.',
-      'any.required': 'Preencha todos dados corretamente.',
-    }),
-  password: Joi.string()
-    .min(6)
-    .required()
-    .messages({
-      'string.min': 'A senha deve ter no mínimo 6 caracteres.',
-      'string.empty': 'Preencha todos dados corretamente.',
-      'any.required': 'Preencha todos dados corretamente.',
-    }),
-});
+const registerSchema = require('../schemas/registerSchema')
+const loginSchema = require('../schemas/loginSchema')
 
 exports.register = async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Validação
-  const { error } = schema.validate({ name, email, password });
+  const { error } = registerSchema.validate({ name, email, password });
 
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -64,8 +34,16 @@ exports.register = async (req, res) => {
 
 
 // Login de usuário
-exports.login = async (req, res) => {
+
+  exports.login = async (req, res) => {
   const { email, password } = req.body;
+
+  const { error } = loginSchema.validate({email, password });
+
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
 
   try {
     const [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);

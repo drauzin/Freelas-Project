@@ -5,6 +5,13 @@ const userController = require('../controllers/userController');
 
 /**
  * @swagger
+ * tags:
+ *   name: Usuários
+ *   description: Endpoints de autenticação e registro de usuários
+ */
+
+/**
+ * @swagger
  * /api/users/register:
  *   post:
  *     summary: Cadastrar novo usuário
@@ -25,6 +32,7 @@ const userController = require('../controllers/userController');
  *                 example: Drauzio Dominik
  *               email:
  *                 type: string
+ *                 format: email
  *                 example: drauzio@qa.com
  *               password:
  *                 type: string
@@ -75,9 +83,9 @@ const userController = require('../controllers/userController');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Erro ao registrar 
- * 
-  * /api/users/login:
+ *                   example: Erro ao registrar usuário
+ *
+ * /api/users/login:
  *   post:
  *     summary: Fazer login de usuário
  *     tags: [Usuários]
@@ -93,6 +101,7 @@ const userController = require('../controllers/userController');
  *             properties:
  *               email:
  *                 type: string
+ *                 format: email
  *                 example: drauzio@qa.com
  *               password:
  *                 type: string
@@ -108,20 +117,33 @@ const userController = require('../controllers/userController');
  *                 message:
  *                   type: string
  *                   example: Login bem-sucedido
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: integer
- *                       example: 1
- *                     name:
- *                       type: string
- *                       example: Drauzio Dominik
- *                     email:
- *                       type: string
- *                       example: drauzio@qa.com
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6...
+ *       400:
+ *         description: Campos inválidos ou em branco
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *             examples:
+ *               senha-curta:
+ *                 summary: Senha muito curta
+ *                 value:
+ *                   message: A senha deve ter no mínimo 6 caracteres.
+ *               email-invalido:
+ *                 summary: E-mail inválido
+ *                 value:
+ *                   message: Email inválido.
+ *               campos-vazios:
+ *                 summary: Campos obrigatórios ausentes
+ *                 value:
+ *                   message: Preencha todos os dados corretamente.
  *       401:
- *         description: E-mail e/ou senha inválidos
+ *         description: E-mail ou senha incorretos
  *         content:
  *           application/json:
  *             schema:
@@ -130,7 +152,18 @@ const userController = require('../controllers/userController');
  *                 message:
  *                   type: string
  *                   example: Email ou senha incorretos.
+ *       500:
+ *         description: Erro interno no servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Erro ao fazer login.
  */
+
     
 router.post('/register', userController.register);
 router.post('/login', userController.login);
