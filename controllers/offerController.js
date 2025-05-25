@@ -1,7 +1,7 @@
 
 const db = require('../config/db');
 const offerSchema = require('../schemas/offerSchema');
-
+o
 exports.createOffer = async (req, res) => {
   // Validação do corpo da requisição
   const { error } = offerSchema.validate(req.body);

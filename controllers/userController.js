@@ -21,36 +21,32 @@ const userModel = require('../models/userModel');
   exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  const { error } = loginSchema.validate({email, password });
-
+  const { error } = loginSchema.validate({ email, password });
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-
   try {
-    const [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+    const user = await userModel.findUserByEmail(email);
 
-    if (users.length === 0 || users[0].password !== password) {
+    // Verifica se usuário existe e se senha está correta (sem criptografia por enquanto)
+    if (!user || user.password !== password) {
       return res.status(401).json({ message: 'Email ou senha incorretos.' });
     }
 
- const user = users[0]; 
- 
- const token = jwt.sign(
+    const token = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: '2h' }
     );
 
-    // Retorna mensagem e token
     return res.status(200).json({
       message: 'Login bem-sucedido',
       token
     });
+
   } catch (error) {
     console.error('Erro ao fazer login:', error);
     return res.status(500).json({ message: 'Erro ao fazer login.' });
   }
 };
-
