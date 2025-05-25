@@ -21,7 +21,6 @@ Projeto sem fins lucrativos
 - Cadastro e login de usuários
 - Documentação da API com Swagger
 - Validações de schemas com Joi
-- Arquitetura MVC
 - Autenticação JWT
   
 ---
