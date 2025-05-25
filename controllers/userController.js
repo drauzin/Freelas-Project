@@ -2,34 +2,17 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const registerSchema = require('../schemas/registerSchema')
 const loginSchema = require('../schemas/loginSchema')
+const userModel = require('../models/userModel');
 
-exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
-
-  const { error } = registerSchema.validate({ name, email, password });
-
-  if (error) {
-    return res.status(400).json({ message: error.details[0].message });
+ exports.register = async (req, res) => {
+ const { name, email, password } = req.body;
+ const { error } = registerSchema.validate({ name, email, password });
+ const existingUser = await userModel.findUserByEmail(email);
+  if (existingUser) {
+    return res.status(400).json({ message: 'E-mail já cadastrado.' });
   }
-
-  try {
-
-     const [existingUser] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
-    // Verifica se o usuário já existe
-    if (existingUser.length > 0) {
-      return res.status(400).json({ message: 'Este e-mail já está registrado.' });
-    }
-    const sql = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
-    await db.query(sql, [name, email, password]);
-    
-
-    res.status(201).json({ message: 'Usuário registrado com sucesso!' });
-  } catch (err) {
-    console.error('Erro no registro:', err);
-    res.status(500).json({ message: 'Erro ao registrar usuário' });
-
-
-  }
+  await userModel.createUser(name, email, password);
+  return res.status(201).json({ message: 'Usuário registrado com sucesso!' });
 };
 
 

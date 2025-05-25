@@ -6,10 +6,9 @@ const swaggerSpec = require('./docs/swagger');
 const userRoutes = require('./routes/userRoutes');
 const offerRoutes = require('./routes/offerRoutes');
 
-// Adiciona suporte para JSON no corpo das requisições
 app.use(express.json());
 
-// Swagger UI
+// Swagger UI - Documentação 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Rotas da API montadas em /api
