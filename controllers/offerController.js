@@ -2,7 +2,6 @@
 const db = require('../config/db');
 const offerSchema = require('../schemas/offerSchema');
 
-
 exports.createOffer = async (req, res) => {
   // Validação do corpo da requisição
   const { error } = offerSchema.validate(req.body);
@@ -22,7 +21,8 @@ exports.createOffer = async (req, res) => {
       message: 'Oferta criada com sucesso!',
       offerId: result.insertId
     });
-  } catch (err) {
+  }
+   catch (err) {
     console.error('Erro ao criar oferta:', err);
     return res.status(500).json({ message: 'Erro interno ao criar oferta.' });
   }
