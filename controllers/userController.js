@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const db = require('../config/db');
 const registerSchema = require('../schemas/registerSchema')
 const loginSchema = require('../schemas/loginSchema')
 const userModel = require('../models/userModel');
@@ -50,3 +49,16 @@ const userModel = require('../models/userModel');
     return res.status(500).json({ message: 'Erro ao fazer login.' });
   }
 };
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params; // <- importante: vem da URL, não do body
+
+  try {
+    await userModel.deleteUser(Number(id));
+    return res.status(200).json({ message: 'Usuário deletado com sucesso.' });
+  } catch (error) {
+    console.error('Erro ao deletar usuário:', error);
+    return res.status(500).json({ message: 'Erro ao deletar usuário.' });
+  }
+};
+

@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./docs/swagger'); 
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./Routes/userRoutes');
 const offerRoutes = require('./routes/offerRoutes');
 
 app.use(express.json());
