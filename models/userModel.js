@@ -23,10 +23,30 @@ exports.updateProfile = async (id, name, email) => {
   });
 };
 
+
+
 exports.deleteUser =  async (id) => {
 
 return await  prisma.user.delete({
     where: { id }
   });
 
+}
+
+exports.findUserById = async (id) => {
+  return await prisma.user.findUnique({
+    where: { id }
+  });
+};
+
+exports.findAllUsers = async () => {
+  return await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true
+    }
+  });
 }

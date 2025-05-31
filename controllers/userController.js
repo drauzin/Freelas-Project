@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const registerSchema = require('../schemas/registerSchema')
 const loginSchema = require('../schemas/loginSchema')
 const userModel = require('../models/userModel');
+const deleteUserSchema = require('../schemas/deleteUserSchema');
 
  exports.register = async (req, res) => {
  const { name, email, password } = req.body;
@@ -51,9 +52,16 @@ const userModel = require('../models/userModel');
 };
 
 exports.deleteUser = async (req, res) => {
-  const { id } = req.params; // <- importante: vem da URL, não do body
-
+  const { id } = req.params;
+  const { error } = deleteUserSchema.validate({ id });
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
   try {
+    const user = await userModel.findUserById(Number(id));
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não existe.' });
+    }
     await userModel.deleteUser(Number(id));
     return res.status(200).json({ message: 'Usuário deletado com sucesso.' });
   } catch (error) {
@@ -62,3 +70,16 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
+exports.listUsers = async (req, res) => {
+  try {
+    const users = await userModel.findAllUsers();
+    const usersFormatted = users.map(user => ({
+      ...user,
+      createdAt: user.createdAt.toLocaleString('pt-BR'),
+      updatedAt: user.updatedAt.toLocaleString('pt-BR')
+    }));
+    return res.json(usersFormatted);
+  } catch (error) {
+    return res.status(500).json({ message: 'Erro ao listar usuários.' });
+  }
+};
