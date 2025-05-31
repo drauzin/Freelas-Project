@@ -129,6 +129,6 @@ const verifyToken    = require('../middlewares/authMiddleware');
  *                   example: Erro interno ao buscar ofertas.
  */
 
-router.get('/', offerController.getAllOffers);
+
 router.post('/', verifyToken, offerController.createOffer);
 module.exports = router;
