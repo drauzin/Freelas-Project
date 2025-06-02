@@ -16,7 +16,9 @@
     "prisma": "^6.8.2",
     "tailwindcss": "^4.1.8"
   },
-  "scripts": {
-    "build:css": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
-  }
+"scripts": {
+  "build:css": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+  "start": "node server.js"
+}
+
 }
