@@ -32,3 +32,8 @@ model Offer {
   userId      Int
   user        User     @relation("UserOffers", fields: [userId], references: [id], onDelete: Cascade)
 }
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
