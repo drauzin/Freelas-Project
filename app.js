@@ -5,6 +5,11 @@ const app = express();
 const userRoutes = require('./routes/userRoutes');
 const offerRoutes = require('./routes/offerRoutes');
 
+//Cors
+
+app.use(cors());
+
+
 // Middlewares
 app.use(express.json());
 
@@ -14,5 +19,6 @@ app.use('/offers', offerRoutes);
 app.get('/', (req, res) => {
   res.send('API FREELAS ONLINE.');
 });
+
 
 module.exports = app;

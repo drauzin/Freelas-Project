@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@prisma/client": "^6.8.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "joi": "^17.13.3",
@@ -16,9 +17,8 @@
     "prisma": "^6.8.2",
     "tailwindcss": "^4.1.8"
   },
-"scripts": {
-  "build:css": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
-  "start": "node server.js"
-}
-
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "start": "node server.js"
+  }
 }
