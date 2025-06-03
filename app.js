@@ -8,13 +8,16 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const offerRoutes = require('./routes/offerRoutes');
 
-//Cors
+const cors = require('cors');
 
+
+// CORS config
 app.use(cors({
-  origin: ['http://localhost:8081', 'http://localhost:19006'], // inclua todas as URLs do seu frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
+  origin: 'http://localhost:8081',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
 }));
+
 
 // Middlewares
 app.use(express.json());
