@@ -2,12 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-// Importação de rotas
 const userRoutes = require('./routes/userRoutes');
 const offerRoutes = require('./routes/offerRoutes');
 
-// CORS - coloque isso antes de tudo
-const allowedOrigins = ['http://localhost:8081', 'https://seu-frontend-produção.com'];
+const allowedOrigins = [
+  'http://localhost:8081'
+ 
+];
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -21,7 +23,20 @@ app.use(cors({
 
 app.use(express.json());
 
-// Uso das rotas
+// Middleware extra para responder preflight corretamente
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8081'); // ou '*'
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 app.use('/api/users', userRoutes);
 app.use('/offers', offerRoutes);
 
