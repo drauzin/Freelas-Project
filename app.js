@@ -2,22 +2,27 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-// Importar rotas
+// Importação de rotas
 const userRoutes = require('./routes/userRoutes');
 const offerRoutes = require('./routes/offerRoutes');
 
-// CORS config
+// CORS - coloque isso antes de tudo
+const allowedOrigins = ['http://localhost:8081', 'https://seu-frontend-produção.com'];
 app.use(cors({
-  origin: 'http://localhost:8081',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
-// Middlewares
 app.use(express.json());
 
-// Rotas
-app.use('/api/users', userRoutes);  // <- Certifique-se de usar essa rota
+// Uso das rotas
+app.use('/api/users', userRoutes);
 app.use('/offers', offerRoutes);
 
 app.get('/', (req, res) => {
