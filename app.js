@@ -5,20 +5,17 @@ const app = express();
 const userRoutes = require('./routes/userRoutes');
 const offerRoutes = require('./routes/offerRoutes');
 
-const allowedOrigins = [
-  'http://localhost:8081',
-  'https://freelas-front.vercel.app' //
-];
+const allowedOrigins = ['http://localhost:8081'];
 
 app.use(cors({
-  origin: function (origin, callback) {
+  origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
+  credentials: true
 }));
 
 app.use(express.json());
